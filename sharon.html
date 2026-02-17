@@ -1,0 +1,149 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Heart, Baby, Siren, Stethoscope, LogIn, UserPlus, MapPin, Phone, Clock } from "lucide-react";
+import hero1 from "@/assets/hero-1.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+
+const slides = [
+  { image: hero1, text: "Newborn care & lactation support" },
+  { image: hero2, text: "24/7 Emergency & NICU" },
+  { image: hero3, text: "Expert gynaecologists & paediatricians" },
+];
+
+const Index = () => {
+  const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrent((p) => (p + 1) % slides.length), 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Background overlay */}
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_20%_30%,hsl(330_60%_95%_/_0.8),hsl(340_50%_97%_/_0.95))] -z-10" />
+
+      <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
+        {/* Navbar */}
+        <nav className="gradient-navbar rounded-full px-8 py-5 flex items-center justify-between text-primary-foreground">
+          <div className="flex items-center gap-3">
+            <Heart className="w-7 h-7" />
+            <span className="text-xl md:text-2xl font-extrabold tracking-tight">Sri Lakshmi Maternity</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-3">
+            <button
+              onClick={() => navigate("/login")}
+              className="flex items-center gap-2 bg-primary-foreground/20 hover:bg-primary-foreground/30 px-5 py-2.5 rounded-full text-sm font-bold transition-all border-none shadow-none"
+            >
+              <LogIn className="w-4 h-4" />
+              Login
+            </button>
+            <button
+              onClick={() => navigate("/register")}
+              className="flex items-center gap-2 bg-primary-foreground text-primary px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-all border-none shadow-none"
+            >
+              <UserPlus className="w-4 h-4" />
+              Register
+            </button>
+          </div>
+        </nav>
+
+        {/* Slideshow */}
+        <div className="relative w-full h-[300px] md:h-[420px] rounded-5xl overflow-hidden border-2 border-accent shadow-lg">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+              style={{ opacity: current === i ? 1 : 0 }}
+            >
+              <img src={slide.image} alt={slide.text} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/50 to-transparent" />
+              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10">
+                <span className="bg-primary-foreground/20 backdrop-blur-xl px-6 py-3 rounded-full text-primary-foreground font-extrabold text-lg md:text-2xl border border-primary-foreground/30">
+                  {slide.text}
+                </span>
+              </div>
+            </div>
+          ))}
+          {/* Dots */}
+          <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-10 flex gap-3">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`w-4 h-4 rounded-full border-2 transition-all border-none shadow-none ${
+                  current === i
+                    ? "bg-primary-foreground scale-125 border-primary-foreground"
+                    : "bg-primary-foreground/40 border-primary-foreground/60"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile auth buttons */}
+        <div className="flex sm:hidden gap-3 justify-center">
+          <button
+            onClick={() => navigate("/login")}
+            className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-bold border-b-4 border-primary/60 shadow-none"
+          >
+            <LogIn className="w-4 h-4" /> Login
+          </button>
+          <button
+            onClick={() => navigate("/register")}
+            className="flex items-center gap-2 bg-secondary text-secondary-foreground px-6 py-3 rounded-full font-bold border border-border shadow-none"
+          >
+            <UserPlus className="w-4 h-4" /> Register
+          </button>
+        </div>
+
+        {/* Features */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            { icon: Baby, title: "Newborn Care", desc: "Expert neonatal care with state-of-the-art NICU facilities" },
+            { icon: Siren, title: "24/7 Emergency", desc: "Round-the-clock emergency services and ambulance support" },
+            { icon: Stethoscope, title: "Expert Doctors", desc: "Experienced gynaecologists and paediatricians" },
+          ].map((feature, i) => (
+            <div key={i} className="gradient-card card-3d rounded-4xl p-8 text-center border border-border">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-primary/10 mb-4">
+                <feature.icon className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-extrabold text-foreground mb-2">{feature.title}</h3>
+              <p className="text-sm text-muted-foreground">{feature.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Hospital Info */}
+        <section className="glass-panel rounded-4xl p-6 md:p-8">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-3 border-b-4 border-accent pb-3 mb-5">
+            <Heart className="w-6 h-6 text-primary" />
+            Hospital Information
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { icon: MapPin, text: "Kothapeta, Guntur, Andhra Pradesh" },
+              { icon: Stethoscope, text: "Cardiology, Neurology, Pediatrics, Orthopedics, Dermatology" },
+              { icon: Phone, text: "Emergency: +91 9876543210" },
+              { icon: Clock, text: "9:00 AM – 8:00 PM" },
+            ].map((info, i) => (
+              <div key={i} className="flex items-center gap-3 bg-card px-5 py-4 rounded-full border border-border">
+                <info.icon className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-sm font-medium text-foreground">{info.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="text-center py-6 text-sm text-muted-foreground">
+          © 2026 Sri Lakshmi Maternity Hospital. All rights reserved.
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default Index;
